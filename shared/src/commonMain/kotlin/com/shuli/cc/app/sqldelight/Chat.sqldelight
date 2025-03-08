@@ -1,14 +1,34 @@
-CREATE TABLE chat_history (
-    id TEXT NOT NULL PRIMARY KEY,
+-- shared/src/commonMain/sqldelight/chat.sqldelight
+CREATE TABLE chat_session (
+    id TEXT PRIMARY KEY NOT NULL,
+    title TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    model_provider TEXT NOT NULL,
+    temperature REAL NOT NULL,
+    max_tokens INTEGER NOT NULL,
+    top_p REAL NOT NULL,
+    presence_penalty REAL NOT NULL,
+    frequency_penalty REAL NOT NULL,
+    message_count INTEGER NOT NULL
+);
+
+CREATE TABLE chat_message (
+    id TEXT PRIMARY KEY NOT NULL,
     session_id TEXT NOT NULL,
     role TEXT NOT NULL,
     content TEXT NOT NULL,
     timestamp INTEGER NOT NULL,
-    status TEXT NOT NULL
+    status TEXT NOT NULL,
+    error TEXT
 );
 
-create:
-INSERT INTO chat_history VALUES (?, ?, ?, ?, ?, ?);
+indexes {
+    index(session_id)
+}
 
-getBySession:
-SELECT * FROM chat_history WHERE session_id = ? ORDER BY timestamp ASC;
+getAllSessions:
+SELECT * FROM chat_session ORDER BY updated_at DESC;
+
+getMessagesBySession:
+SELECT * FROM chat_message WHERE session_id = ? ORDER BY timestamp ASC;

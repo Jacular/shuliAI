@@ -3,7 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-
+    alias(libs.plugins.sqldelightPlugin) apply false
+    alias(libs.plugins.ktorPlugin)
 }
 
 kotlin {
@@ -34,6 +35,7 @@ kotlin {
             implementation(libs.compose.ui.tooling)
             implementation(libs.compose.material3)
             implementation(libs.compose.foundation)
+            implementation(libs.androidx.runtime.android)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -50,11 +52,15 @@ kotlin {
 
             // Utils
             implementation("com.soywiz.korlibs.klock:klock:4.0.5")
+            implementation("io.ktor:ktor-client-logging:2.3.6")
+            // DateTime
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.android.driver)
             implementation("io.insert-koin:koin-android:3.5.3")
+            implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -63,6 +69,14 @@ kotlin {
     }
 }
 
+sqldelight {
+    databases {
+        create("ChatDatabase") {
+            packageName.set("com.shuli.cc.database")
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight/schemas"))
+        }
+    }
+}
 android {
     namespace = "com.shuli.cc.app"
     compileSdk = 35
@@ -76,4 +90,7 @@ android {
 }
 dependencies {
     implementation(libs.identity.jvm)
+    implementation(libs.transport.runtime)
+    implementation(libs.androidx.runtime.android)
+    implementation(project(":shared"))
 }

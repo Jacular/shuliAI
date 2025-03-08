@@ -3,25 +3,22 @@ package com.shuli.cc.app.di
 import com.shuli.cc.app.data.local.ChatDatabase
 import org.koin.dsl.module
 
-class Koin {
-    val appModule = module {
-        single<DriverFactory> {
-            // 各平台实现见上文
-            DriverFactory()
-        }
+val appModule = module {
+    // 数据库
+    single<DriverFactory> { DriverFactory() }
+    single<ChatDatabase> { ChatDatabase(get<DriverFactory>().createDriver()) }
+    single<ChatDao> { get<ChatDatabase>().chatQueries }
 
-        single<ChatDatabase> {
-            ChatDatabase(get<DriverFactory>().createDriver())
-        }
+    // 网络
+    single { ApiClient() }
 
-        single<ChatRepository> {
-            ChatRepositoryImpl(get(), get(), get())
-        }
+    // Repository
+    single<ChatRepository> { ChatRepositoryImpl(get(), get(), get()) }
 
-        single { ContextManager(get()) }
+    // ViewModel
+    viewModel { ChatViewModel() }
+}
 
-        viewModel { params ->
-            ChatViewModel(get(), get())
-        }
-    }
+fun initKoin() = initKoin {
+    modules(appModule)
 }

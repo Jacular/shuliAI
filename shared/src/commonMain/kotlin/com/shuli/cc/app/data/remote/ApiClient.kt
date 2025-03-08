@@ -1,5 +1,17 @@
 package com.shuli.cc.app.data.remote
 
+import com.google.android.datatransport.runtime.logging.Logging
+import com.shuli.cc.app.domain.model.ChatMessage
+import com.shuli.cc.app.domain.model.ModelConfig
+import com.shuli.cc.app.domain.model.ModelProvider
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.post
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+
 // shared/commonMain/kotlin/data/remote/ApiClient.kt
 class ApiClient {
     private val httpClient = HttpClient {
