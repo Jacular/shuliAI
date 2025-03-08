@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.sqldelightPlugin) apply false
+    alias(libs.plugins.sqldelightPlugin)
     alias(libs.plugins.ktorPlugin)
 }
 

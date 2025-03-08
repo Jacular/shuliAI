@@ -1,49 +1,25 @@
 # shuliAI
 使用Kotlin Multiplatform实现一款Ai对话App，里面需要支持主流大模型接口调用例如deepseek、GPT、Ginimi、文心一言、通义千问等大语言模型，完整代码
 # 完整项目结构
-Shuli_AI-Chat-KMM/
-├── build.gradle.kts
-├── settings.gradle.kts
-├── gradle.properties
-├── shared/
-│   ├── build.gradle.kts
-│   └── src/
-│       ├── commonMain/
-│       │   ├── kotlin/
-│       │   │   ├── di/
-│       │   │   │   └── Koin.kt
-│       │   │   ├── data/
-│       │   │   │   ├── local/
-│       │   │   │   │   ├── ChatDatabase.kt
-│       │   │   │   │   └── Dao.kt
-│       │   │   │   ├── remote/
-│       │   │   │   │   ├── ApiClient.kt
-│       │   │   │   │   └── providers/
-│       │   │   │   └── repository/
-│       │   │   ├── domain/
-│       │   │   │   ├── model/
-│       │   │   │   └── usecase/
-│       │   │   ├── presentation/
-│       │   │   │   ├── viewmodel/
-│       │   │   │   └── screen/
-│       │   │   └── utils/
-│       │   └── resources/
-│       ├── androidMain/
-│       │   └── kotlin/
-│       │       └── Platform.kt
-│       └── iosMain/
-│           └── kotlin/
-│               └── Platform.kt
-├── androidApp/
-│   ├── build.gradle.kts
-│   └── src/main/
-│       ├── AndroidManifest.xml
-│       ├── java/com/example/ai_chat/
-│       │   └── MainActivity.kt
-│       └── res/
-└── iosApp/
-├── build.gradle.kts
-└── src/
-└── iosApp/
-├── AppDelegate.swift
-└── ContentView.swift
+
+&zwnj;**关键模块说明**&zwnj;：
+1. &zwnj;**共享模块 (shared)**&zwnj;
+    - 包含跨平台的Kotlin代码实现‌:ml-citation{ref="1" data="citationList"}
+    - `commonMain` 存放通用业务逻辑和数据结构‌:ml-citation{ref="2" data="citationList"}
+    - 平台差异通过`androidMain`/`iosMain`实现‌:ml-citation{ref="3" data="citationList"}
+
+2. &zwnj;**Android应用模块 (androidApp)**&zwnj;
+    - 使用`build.gradle.kts`配置Android依赖‌:ml-citation{ref="4,5" data="citationList"}
+    - 包含原生Activity和资源文件‌:ml-citation{ref="2" data="citationList"}
+
+3. &zwnj;**iOS应用模块 (iosApp)**&zwnj;
+    - 采用SwiftUI实现界面组件‌:ml-citation{ref="6" data="citationList"}
+    - 通过KMMBridge实现跨平台依赖管理‌:ml-citation{ref="1" data="citationList"}
+
+4. &zwnj;**构建配置**&zwnj;
+    - `settings.gradle.kts`定义多项目结构‌:ml-citation{ref="5" data="citationList"}
+    - `gradle.properties`统一管理版本号‌:ml-citation{ref="4,7" data="citationList"}
+
+:::ml-data{name=citationList}
+```json
+[{"abstract":" NotificationsYou must be signed in to change notification settings Fork21 Star388 Apache-2.0 license starsforks NotificationsYou must be signed in to change notification settings Code Issues4 Pull requests Discussions Actions Projects Security Insights Additional navigation options main 11Branches49Tags Code Folders and files Name Last commit message Last commit date Latest commit KevinSchildhorn Update gradle.properties Jan 28, 2025 d146084·Jan 28, 2025 History 514 Commits .github updating versions Jan 16, 2025 gradle Kpg/debug builds (#274) Dec 13, 2024 kmmbridge-github Merge branch 'main' into ks/UpdatingDescriptions Dec 20, 2024 kmmbridge-gitlab revert to publishing in each module Nov 28, 2024 kmmbridge-test revert to publishing in each module Nov 28, 2024 kmmbridge Update CocoapodsDependencyManager.kt Jan 18, 2025 test-projects/basic Kpg/testing (#266) Nov 28, ","url":"https://github.com/touchlab/KMMBridge/","text":"GitHub - touchlab/KMMBridge: KMMBridge is a tool that helps publish Kotlin Multiplatform (KMP) Xcode binaries for use from Swift Package Manager (SPM) and CocoaPods.","source":{"name":"GitHub"},"poster":"http://t8.baidu.com/it/u=13414768,2143691276&fm=217&app=126&f=JPEG?w=799&h=418&s=B21F708400CA1D4524165D810300E08A","author_url":"","author_unify_sign":0,"author_name":"","author_img":"","type":"","vid":"","level":0,"suffix":"","title":"GitHub - touchlab/KMMBridge: KMMBridge is a tool that helps publish Kotlin Multiplatform (KMP) Xcode binaries for use from Swift Package Manager (SPM) and CocoaPods.","thumbnail":"http://t8.baidu.com/it/u=13414768,2143691276&fm=217&app=126&f=JPEG?w=799&h=418&s=B21F708400CA1D4524165D810300E08A","linkInfo":{"href":"https://github.com/touchlab/KMMBridge/"}},{"abstract":" 1. 项目的目录结构及介绍 ChatGPT Android 项目的目录结构如下: chatgpt-android/ ├── app/ │ ├── benchmark/ │ ├── build-logic/ │ ├── buildSrc/ │ ├── core-data/ │ ├── core-designsystem/ │ ├── core-model/ │ ├── core-navigation/ │ ├── core-network/ │ ├── core-preferences/ │ ├── feature-chat/ │ ├── feature-login/ │ ├── figures/ │ ├── gradle/ │ ├── previews/ │ ├── spotless/ │ ├── editorconfig │ ├── gitignore │ ├──CODE_OF_CONDUCT.md │ ├── CONTRIBUTING.md │ ├── LICENSE │ ├── README.md │ ├── build.gradle.kts │ ├── gradle.properties │ ├── gradlew │ ├── gradlew.bat │ ├── secrets.defaults.properties │ └── settings.gradle.kts └── ... 目录结构介绍 app/: 主应用程序模块,包含所有功能和核心组件。 benchmark/: 性能测试相关代码。 build-logic/: 构建逻辑相关代码。 buildSrc/: 构建脚本相关代码。 core-data/: 数据层","url":"https://blog.csdn.net/gitblog_00166/article/details/142505957","text":"ChatGPT Android 项目教程","source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"icon":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","author_url":"","author_unify_sign":0,"author_name":"","author_img":"","type":"","vid":"","level":0,"suffix":"","title":"ChatGPT Android 项目教程","linkInfo":{"href":"https://blog.csdn.net/gitblog_00166/article/details/142505957"}},{"abstract":"Kotlin 移动端多平台 支持多平台编程是 Kotlin 的主要优势之一。它减少了为不同平台编写和维护相同代码所花费的时间,同时保留了本机编程的灵活性和优势。 1. 基本概念 KMM:Kotlin Multiplatform for mobile(移动设备的 Kotlin 多平台) KMM 多平台的主要用例之一是在移动平台之间共享应用程序逻辑代码 如果要实现本机 UI 或使用平台 API 时,需要编写特定于平台的代码 KMM 当前处于 beta 阶段,已经几乎稳定 Kotlinroadmap 以下为 Kotlin 团队的优先事项 K2 compiler:对 Kotlin编译器的重写,针对速度、并行性和统一性进行了优化。它还将让我们介绍许多预期的语言功能。在 1.9.0 中,K2 编译器已经达到了 JVM 的 Beta 阶段。此版本还增加了对 Kotlin/Native 的支持,并改进了对 Kotlin/JS 的支持,下一步是使 K2 编译器稳定并发布 Kotlin 2.0 K2-based IntelliJ plugin:基于 K2 的 IntelliJ 插件:更快的代码完成、突出显","url":"https://blog.csdn.net/weixin_41559503/article/details/135657400","text":"Kotlin 移动端多平台","source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"icon":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","poster":"http://t8.baidu.com/it/u=3405281839,2974321437&fm=217&app=126&f=JPEG?w=800&h=478&s=7DA43D7315C8654F5E54CDCB020040B3","author_url":"","author_unify_sign":0,"author_name":"","author_img":"","type":"","vid":"","level":0,"suffix":"","title":"Kotlin 移动端多平台","thumbnail":"http://t8.baidu.com/it/u=3405281839,2974321437&fm=217&app=126&f=JPEG?w=800&h=478&s=7DA43D7315C8654F5E54CDCB020040B3","linkInfo":{"href":"https://blog.csdn.net/weixin_41559503/article/details/135657400"}},{"abstract":"Android kotlin build.gradle.kts配置 1. 添加maven仓库 1. 1. settings配置 1. 1.1. settings.gradle repositories{maven{url'https://maven.aliyun.com/repository/public/'}mavenCentral()} 1 2 3 4 1. 1.2. settings.gradle.kts repositories{maven{setUrl(\"https://maven.aliyun.com/repository/public/\")}mavenCentral()} 1 2 3 4 5 6 1. 2. gradle配置 1. 2.1. build.gradle implementation'com.github.bumptech.glide:glide:4.12.0' 1 1. 2.2. build.gradle.kts implementation(libs.glide) 1   版本号在gradle文件夹下 libs.versions.toml文件中添加 1. 2.2.1. build.gradle.kts   libs.versions.toml文件用来抽离依赖来加载,文件由 4 个主要部分组成:   (1)[versions]部分用于声明可以被依赖项引用的版本   (2)[libraries]部分用于声明坐标的别名   (3)[bundles]部分用于声明依赖包   (4)[plugins]部分用于声明插件   注意:不要使用驼峰命名方式,单词使用 - 分割: [versions]groovy=\"3.0.5\"checkstyle=\"8.37\"[libraries]groovy-core={module=\"org.codehaus.groovy:groovy\",version.ref=\"groovy\"}groovy-json={module=\"org.codehaus.groovy:groovy-json\",version.ref=\"groovy\"}groovy-nio={module=\"org.codehaus.groovy:groovy-nio\",versi","url":"https://blog.csdn.net/qq_36158551/article/details/135393667","text":"Android kotlin build.gradle.kts配置","source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"icon":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","poster":"http://t9.baidu.com/it/u=298023313,3664502982&fm=217&app=126&f=JPEG?w=799&h=277&s=7496EC3A137468220E7C35DA0300D0B2","author_url":"","author_unify_sign":0,"author_name":"","author_img":"","type":"","vid":"","level":0,"suffix":"","title":"Android kotlin build.gradle.kts配置","thumbnail":"http://t9.baidu.com/it/u=298023313,3664502982&fm=217&app=126&f=JPEG?w=799&h=277&s=7496EC3A137468220E7C35DA0300D0B2","linkInfo":{"href":"https://blog.csdn.net/qq_36158551/article/details/135393667"}},{"abstract":" Q2: 插件版本冲突? 总结 Gradle配置指南:深入解析settings.gradle.kts(Kotlin DSL版) settings.gradle.kts 作为Gradle项目的入口文件,settings.gradle.kts(KotlinDSL版本)负责: 定义项目层次结构(单项目/多项目) 配置构建的基础环境 管理插件和依赖仓库 声明全局属性 基础配置选项 单项目配置 // settings.gradle.ktsrootProject.name=\"my-single-project\"// 必填项// 可选:配置项目描述rootProject.description=\"A simple Kotlin application\" 1 2 3 4 5 多项目配置 // settings.gradle.ktsrootProject.name=\"multiProject\"// 包含子模块//include(\"auth-service\", \"chat-service\", \"common-service\")include(\"auth-service\")include(\"chat-service\")include(\"common-service\")// 映射物理目录结构(可选)project(\":app\").projectDir=file(\"a","url":"https://blog.csdn.net/yang2330648064/article/details/145355095","text":"Gradle配置指南:深入解析settings.gradle.kts(Kotlin DSL版)","source":{"logo":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","name":"CSDN博客"},"icon":"https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200","poster":"http://t8.baidu.com/it/u=3836438522,3376271027&fm=217&app=126&f=PNG?w=582&h=608&s=A8D18144F3A4854F4CC51C0A0300E0D1","author_url":"","author_unify_sign":0,"author_name":"","author_img":"","type":"","vid":"","level":0,"suffix":"","title":"Gradle配置指南:深入解析settings.gradle.kts(Kotlin DSL版)","thumbnail":"http://t8.baidu.com/it/u=3836438522,3376271027&fm=217&app=126&f=PNG?w=582&h=608&s=A8D18144F3A4854F4CC51C0A0300E0D1","linkInfo":{"href":"https://blog.csdn.net/yang2330648064/article/details/145355095"}},{"abstract":"joreilly/PeopleInSpace BranchesTags Folders and files Name Last commit message Last commit date Latest commit joreilly Merge pull request#408from joreilly/dependency_updates Feb 10, 2025 11f6de5·Feb 10, 2025 History 907 Commits .github/workflows Use Compose Multiplatform for ISS Position screen contents Jun 30, 2024 PeopleInSpaceSwiftUI some cleanup + dependency updates Dec 24, 2024 SwiftExecutablePackage Swift Executable Package Nov 11, 2023 app dependency updates + some cleanup Oct 5, 2024 backend dependency updates + some cleanup Oct 5, 2024 common some cleanup + dependency updates Dec 24, 2024 compose-desktop type safe project accessors Oct 5, 2024 compose-web fix/cleanup coil3 dependencies Sep 12, 2024 gradle dependency updates Feb 10, 2025 graphql-server dependency updates + some cleanup Oct 5, 2024 wearApp dependency updates + some cleanup Oct 5, 2024 .gitignore update people data Jun 7, 2024 LICENSE add","url":"https://github.com/joreilly/PeopleInSpace","text":"GitHub - joreilly/PeopleInSpace: Kotlin Multiplatform sample with SwiftUI, Jetpack Compose, Compose for Wear, Compose for Desktop, and Compose for Web clients along with Ktor backend.","source":{"name":"GitHub"},"poster":"http://t9.baidu.com/it/u=3389832504,678957104&fm=217&app=126&f=JPEG?w=800&h=803&s=4098CD3259C7D0CE1CE499CA030040B1","author_url":"","author_unify_sign":0,"author_name":"","author_img":"","type":"","vid":"","level":0,"suffix":"","title":"GitHub - joreilly/PeopleInSpace: Kotlin Multiplatform sample with SwiftUI, Jetpack Compose, Compose for Wear, Compose for Desktop, and Compose for Web clients along with Ktor backend.","thumbnail":"http://t9.baidu.com/it/u=3389832504,678957104&fm=217&app=126&f=JPEG?w=800&h=803&s=4098CD3259C7D0CE1CE499CA030040B1","linkInfo":{"href":"https://github.com/joreilly/PeopleInSpace"}},{"abstract":" 加入Gitee 与超过 1200万 开发者一起发现、参与优秀开源项目,私有仓库也完全免费 :) 免费加入 已有帐号?立即登录 文件 master 此仓库是为了提升国内下载速度的镜像仓库,每日同步一次。 原始仓库:https://github.com/ingokegel/jclasslib 克隆/下载 git config --global user.name userName git config --global user.email userEmail jclasslib / build.gradle.kts build.gradle.kts2.49 KB 一键复制编辑原始数据按行查看历史 Ingo Kegel提交于1个月前.6.1.0.1 importorg.gradle.plugins.ide.idea.model.IdeaModel importorg.jetbrains.kotlin.gradle.dsl.KotlinVersion importorg.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile plugins{ idea } version=\"6.1.0.1\" valrootBuildDir=file(\"build/gradle\") layout.buildDirectory=rootBuildDir subprojects{ layout.buildDirectory=File(rootBuildDir,path.substring(1).replace(':','/')) group=\"org.jclasslib\" version=rootProject.version repositories{ flatDir{ dirs=setOf(file(\"lib\"),file(\"$rootDir/lib-compile\")) } maven(\"https://maven.ej-technologies.com/repository\"){ content{ includeGroup(\"com.install4j\") } } maven(\"https://jitpack.io\"){ content","url":"https://gitee.com/mirrors/jclasslib/blob/master/build.gradle.kts","text":"Gitee 极速下载/JClassLib","source":{"name":"gitee.com"},"poster":"http://t8.baidu.com/it/u=808936216,3677811375&fm=217&app=126&f=JPEG?w=800&h=427&s=B5BE6F360B03404308DC44E80200F032","author_url":"","author_unify_sign":0,"author_name":"","author_img":"","type":"","vid":"","level":0,"suffix":"","title":"Gitee 极速下载/JClassLib","thumbnail":"http://t8.baidu.com/it/u=808936216,3677811375&fm=217&app=126&f=JPEG?w=800&h=427&s=B5BE6F360B03404308DC44E80200F032","linkInfo":{"href":"https://gitee.com/mirrors/jclasslib/blob/master/build.gradle.kts"}}]
