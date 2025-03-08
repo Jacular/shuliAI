@@ -1,0 +1,14 @@
+CREATE TABLE chat_history (
+    id TEXT NOT NULL PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    role TEXT NOT NULL,
+    content TEXT NOT NULL,
+    timestamp INTEGER NOT NULL,
+    status TEXT NOT NULL
+);
+
+create:
+INSERT INTO chat_history VALUES (?, ?, ?, ?, ?, ?);
+
+getBySession:
+SELECT * FROM chat_history WHERE session_id = ? ORDER BY timestamp ASC;
