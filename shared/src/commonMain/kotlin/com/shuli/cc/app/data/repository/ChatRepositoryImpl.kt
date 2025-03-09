@@ -1,5 +1,6 @@
 package com.shuli.cc.app.data.repository
 
+import com.shuli.cc.app.data.local.ChatDao
 import com.shuli.cc.app.data.remote.ApiClient
 import com.shuli.cc.app.domain.model.ChatMessage
 import com.shuli.cc.app.domain.model.MessageRole

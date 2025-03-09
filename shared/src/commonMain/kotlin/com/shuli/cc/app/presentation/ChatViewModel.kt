@@ -1,6 +1,7 @@
 package com.shuli.cc.app.presentation
 
 import com.shuli.cc.app.data.repository.ChatRepository
+import com.shuli.cc.app.domain.model.ChatMessage
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

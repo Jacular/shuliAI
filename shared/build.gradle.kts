@@ -73,7 +73,7 @@ kotlin {
 sqldelight {
     databases {
         create("ChatDatabase") {
-            packageName.set("com.shuli.cc.database")
+            packageName.set("com.shuli.cc.app.database")
             schemaOutputDirectory.set(file("src/commonMain/sqldelight/schemas"))
         }
     }

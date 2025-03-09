@@ -1,6 +1,10 @@
 package com.shuli.cc.app.di
 
-import com.shuli.cc.app.data.local.ChatDatabase
+import com.shuli.cc.app.data.local.ChatDao
+import com.shuli.cc.app.data.remote.ApiClient
+import com.shuli.cc.app.data.repository.ChatRepository
+import com.shuli.cc.app.data.repository.ChatRepositoryImpl
+import com.shuli.cc.app.presentation.ChatViewModel
 import org.koin.dsl.module
 
 val appModule = module {
