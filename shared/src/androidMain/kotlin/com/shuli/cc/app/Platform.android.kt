@@ -1,6 +1,8 @@
 package com.shuli.cc.app
 
 import android.content.Context
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.shuli.cc.app.data.remote.KeyType
 import com.shuli.cc.app.domain.model.ModelProvider
 

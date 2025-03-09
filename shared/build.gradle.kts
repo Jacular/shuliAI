@@ -31,8 +31,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.compose.ui)
-            implementation(libs.compose.ui.tooling)
             implementation(libs.compose.material3)
+            implementation(libs.compose.ui.tooling)
             implementation(libs.compose.foundation)
             implementation(libs.androidx.runtime.android)
             implementation(libs.kotlinx.coroutines.core)
@@ -42,12 +42,8 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             // Database
             implementation(libs.sqlde.light.runtime)
-            implementation(libs.koin.core)
             // DI
-            implementation("io.insert-koin:koin-core:3.5.3")
-
-            // ViewModel
-            implementation("com.rickclephas.kmm:kmm-viewmodel-core:1.0.0")
+            implementation(libs.koin.core)
 
             // Utils
             implementation("com.soywiz.korlibs.klock:klock:4.0.5")
@@ -56,10 +52,16 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
         }
         androidMain.dependencies {
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.android.driver)
-            implementation("io.insert-koin:koin-android:3.5.3")
+            implementation(libs.identity.jvm)
+            implementation(libs.transport.runtime)
+            implementation(libs.androidx.runtime.android)
             implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
+            // ViewModel
+            //implementation("com.rickclephas.kmm:kmm-viewmodel-core:1.0.0")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -86,10 +88,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-}
-dependencies {
-    implementation(libs.identity.jvm)
-    implementation(libs.transport.runtime)
-    implementation(libs.androidx.runtime.android)
-    implementation(project(":shared"))
 }

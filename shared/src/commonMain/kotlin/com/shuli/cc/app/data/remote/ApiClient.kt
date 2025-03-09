@@ -1,16 +1,21 @@
 package com.shuli.cc.app.data.remote
 
-import com.google.android.datatransport.runtime.logging.Logging
+
 import com.shuli.cc.app.domain.model.ChatMessage
 import com.shuli.cc.app.domain.model.ModelConfig
 import com.shuli.cc.app.domain.model.ModelProvider
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
 import io.ktor.client.request.post
-import io.ktor.http.ContentType.Application.Json
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.Serializable
 
 // shared/commonMain/kotlin/data/remote/ApiClient.kt
 class ApiClient {
@@ -50,7 +55,7 @@ class ApiClient {
             contentType(ContentType.Application.Json)
             setBody(GptRequest(
                 model = "gpt-3.5-turbo",
-                messages = messages.map { GptMessage(it.role.name.lowercase(), it.content) },
+                messages = messages.map { GptRequest.GptMessage(it.role.name.lowercase(), it.content) },
                 temperature = config.temperature,
                 max_tokens = config.maxTokens
             ))
@@ -67,7 +72,7 @@ class ApiClient {
             header("Authorization", "Bearer ${getApiKey(ModelProvider.DEEPSEEK)}")
             contentType(ContentType.Application.Json)
             setBody(DeepSeekRequest(
-                messages = messages.map { DeepSeekMessage(it.role.name.lowercase(), it.content) },
+                messages = messages.map { DeepSeekRequest.DeepSeekMessage(it.role.name.lowercase(), it.content) },
                 temperature = config.temperature,
                 max_tokens = config.maxTokens
             ))

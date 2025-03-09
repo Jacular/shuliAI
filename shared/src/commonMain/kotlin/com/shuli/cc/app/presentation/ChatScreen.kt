@@ -1,12 +1,18 @@
 package com.shuli.cc.app.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 
 // shared/commonMain/kotlin/presentation/ChatScreen.kt
 @Composable
-fun ChatScreen(viewModel: ChatViewModel = koinViewModel()) {
-    val messages by viewModel.messages.collectAsState()
+fun ChatScreen(sessionId: String) {
+    val viewModel: ChatViewModel = koinViewModel()
     var inputText by remember { mutableStateOf("") }
+
+    LaunchedEffect(sessionId) {
+        viewModel.loadHistory(sessionId)
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -17,7 +23,7 @@ fun ChatScreen(viewModel: ChatViewModel = koinViewModel()) {
             modifier = Modifier.weight(1f),
             reverseLayout = true
         ) {
-            items(messages) { message ->
+            items(viewModel.messages.value) { message ->
                 ChatMessageItem(message)
             }
         }
@@ -27,7 +33,7 @@ fun ChatScreen(viewModel: ChatViewModel = koinViewModel()) {
             text = inputText,
             onTextChange = { inputText = it },
             onSend = {
-                viewModel.sendMessage(inputText)
+                viewModel.sendMessage(sessionId, inputText)
                 inputText = ""
             },
             isLoading = viewModel.isLoading.value
@@ -36,21 +42,65 @@ fun ChatScreen(viewModel: ChatViewModel = koinViewModel()) {
 }
 
 @Composable
-fun ChatMessageItem(message: ChatMessage) {
-    val backgroundColor = when(message.role) {
+private fun ChatMessageItem(message: ChatMessage) {
+    val bubbleColor = when (message.role) {
         MessageRole.USER -> Color.Blue.copy(alpha = 0.1f)
         MessageRole.ASSISTANT -> Color.LightGray.copy(alpha = 0.1f)
+        MessageRole.SYSTEM -> Color.Red.copy(alpha = 0.1f)
     }
 
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = backgroundColor,
-        modifier = Modifier.padding(8.dp)
+    Box(
+        modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .background(bubbleColor, RoundedCornerShape(16.dp))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = message.content)
+            Text(
+                text = message.content,
+                modifier = Modifier.fillMaxWidth()
+            )
+
             if (message.status == MessageStatus.SENDING) {
-                CircularProgressIndicator(modifier = Modifier.size(16.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun InputField(
+    text: String,
+    onTextChange: (String) -> Unit,
+    onSend: () -> Unit,
+    isLoading: Boolean
+) {
+    Row(
+        modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TextField(
+            value = text,
+            onValueChange = onTextChange,
+            modifier = Modifier.weight(1f),
+            placeholder = { Text("输入消息...") }
+        )
+
+        Button(
+            onClick = onSend,
+            enabled = text.isNotBlank() && !isLoading
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+            } else {
+                Text("发送")
             }
         }
     }
