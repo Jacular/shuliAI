@@ -1,91 +1,107 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.sqldelightPlugin)
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
     androidTarget {
         compilations.all {
-            compileTaskProvider.configure {
-                compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_1_8)
-                }
+            kotlinOptions {
+                jvmTarget = "1.8"
             }
         }
     }
-    
+
+    jvm("desktop")
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
             isStatic = true
         }
     }
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.compose.ui)
-            implementation(libs.compose.material3)
-            implementation(libs.compose.ui.tooling)
-            implementation(libs.compose.foundation)
-            implementation(libs.androidx.runtime.android)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            // Serialization
-            implementation(libs.ktor.serialization.kotlinx.json)
-            // Database
-            implementation(libs.sqlde.light.runtime)
-            // DI
-            implementation(libs.koin.core)
+        val desktopMain by getting
 
-            // Utils
-            implementation("com.soywiz.korlibs.klock:klock:4.0.5")
-            implementation("io.ktor:ktor-client-logging:2.3.6")
-            // DateTime
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
-        }
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.sqldelight.android.driver)
-            implementation(libs.identity.jvm)
-            implementation(libs.transport.runtime)
-            implementation(libs.androidx.runtime.android)
+            implementation(libs.ktor.client.android)
             implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
-            // ViewModel
-            //implementation("com.rickclephas.kmm:kmm-viewmodel-core:1.0.0")
+        }
+
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.ui)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
+            implementation(libs.bundles.ktor)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.kotlin.serialization)
+            implementation(libs.media.kamel)
+            implementation(libs.koin.compose)
+            implementation(libs.paging.compose.common)
+        }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.cio)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation(libs.sqldelight.native.driver)
         }
     }
 }
 
-sqldelight {
-    databases {
-        create("ChatDatabase") {
-            packageName.set("com.shuli.cc.app.database")
-            schemaOutputDirectory.set(file("src/commonMain/sqldelight/schemas"))
-        }
-    }
-}
 android {
     namespace = "com.shuli.cc.app"
-    compileSdk = 35
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+
     defaultConfig {
-        minSdk = 24
+        applicationId = "com.shuli.cc.app"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        versionCode = 1
+        versionName = "1.0"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    dependencies {
+        debugImplementation(libs.compose.ui.tooling)
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.shuli.cc.app"
+            packageVersion = "1.0.0"
+        }
     }
 }
